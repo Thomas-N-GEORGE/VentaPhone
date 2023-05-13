@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import LoginScreen from "./components/login";
 import HomeScreen from "./components/home";
+import OrdersScreen from "./components/orders";
 import DetailScreen from "./components/order-details";
 import ConversationScreen from "./components/conversation";
 
@@ -19,6 +20,11 @@ function App() {
           name="Home"
           component={HomeScreen}
           options={{ title: "My Home page Title" }}
+        />
+        <Stack.Screen
+          name="Orders"
+          component={OrdersScreen}
+          options={{ title: "All My orders" }}
         />
         <Stack.Screen
           name="Login"

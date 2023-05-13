@@ -1,13 +1,23 @@
 // Our order detailed page
 
-import React from 'react';
-import { StatusBar } from 'expo-status-bar';
+import React from "react";
+import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 
-export default Detail = () => {
+export default Detail = ({ route, navigation }) => {
+  // get params
+  const { orderId, orderRef } = route.params;
+
+  /* 
+    We need to fetch order # from https://ventalis.herokuapp.com/api/orders/#
+    And display details.
+  */
+
   return (
     <View style={styles.container}>
-      <Text>This is our DETAIL ORDER PAGE</Text>
+      <Text>
+        ORDER id {orderId} , ref {orderRef}
+      </Text>
       <StatusBar style="auto" />
     </View>
   );
