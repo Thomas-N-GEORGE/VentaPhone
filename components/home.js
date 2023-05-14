@@ -1,11 +1,11 @@
 // Our Hone page
 
-import React from 'react';
-import { StatusBar } from 'expo-status-bar';
+import React, { useContext } from "react";
+import { StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, Text, View } from "react-native";
+import { CurrentUserContext } from "../utils/user-class";
 
 export default Home = ({ navigation }) => {
-
   /* 
     We need to fetch user # details
     from https://ventalis.herokuapp.com/api/users/#
@@ -13,28 +13,37 @@ export default Home = ({ navigation }) => {
     BUT not sure where to pass them...
     And display details.
   */
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+
+  console.log("user in HOME PAGE : ", currentUser);
 
   const fakeUser = {
-    'first_name': 'Thomas',
-    'last_name': 'George',
-    'employeeFirstName' : 'Julie',
-  }
+    first_name: "Thomas",
+    last_name: "George",
+    employeeFirstName: "Julie",
+  };
 
   return (
     <View style={styles.container}>
       <Text>This is our HOME PAGE.</Text>
-      <Text>Mon conseiller : {fakeUser.employeeFirstName}</Text>
-      <Button
-        title="Login ?"
-        onPress={() => navigation.navigate('Login')}
-      />
+      {currentUser !== null ? (
+        <View>
+          <Text>Bienvenue, {currentUser.first_name} </Text>
+          <Text>
+            Votre conseiller Ventalis: {currentUser.employeeFirstName}
+          </Text>
+        </View>
+      ) : (
+        <Text>Vous n'êtes pas connecté(e).</Text>
+      )}
+      <Button title="Login ?" onPress={() => navigation.navigate("Login")} />
       <Button
         title="All Orders"
-        onPress={() => navigation.navigate('Orders')}
+        onPress={() => navigation.navigate("Orders")}
       />
       <Button
         title="Contacter mon conseiller"
-        onPress={() => navigation.navigate('Conversation')}
+        onPress={() => navigation.navigate("Conversation")}
       />
       <StatusBar style="auto" />
     </View>

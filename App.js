@@ -1,6 +1,6 @@
 // Main APP.
 
-import React from "react";
+import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -9,12 +9,21 @@ import HomeScreen from "./components/home";
 import OrdersScreen from "./components/orders";
 import DetailScreen from "./components/order-details";
 import ConversationScreen from "./components/conversation";
+import { User, CurrentUserContext } from "./utils/user-class";
 
 const Stack = createNativeStackNavigator();
 
+// const user = new User();
+
 function App() {
+  // Our User context object
+  const [currentUser, setCurrentUser] = useState(null);
   return (
     <NavigationContainer>
+    <CurrentUserContext.Provider value={{
+        currentUser,
+        setCurrentUser
+      }}>
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
@@ -42,6 +51,7 @@ function App() {
           options={{ title: "Conversation" }}
         />
       </Stack.Navigator>
+      </CurrentUserContext.Provider>
     </NavigationContainer>
   );
 }
