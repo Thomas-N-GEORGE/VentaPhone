@@ -1,61 +1,103 @@
 // Our conversation page.
 
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
-
-const url = "https://ventalis.herokuapp.com/api/user_conversations/";
-const token = "";
+import {
+  Alert,
+  Button,
+  FlatList,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import { CurrentUserContext } from "../utils/user-class";
 
 export default Conversation = ({ navigation }) => {
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+  const [loading, setLoading] = useState(true);
+  const [conversationId, setConversationId] = useState(null);
+  const [data, setData] = useState(false);
+  const messageInput = useRef(null);
+  const [message, setMessage] = useState("");
+
   /* 
-    We need to fetch ALL USER ORDERS
+    We need to fetch user conversation
     from https://ventalis.herokuapp.com/api/user_conversations/
   */
-
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [data, setData] = useState(false);
-
-  const callAPI = async () => {
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `token ${token}`,
-        },
+  const getConversation = () => {
+    if (currentUser !== null) {
+      currentUser.apiGetConversation(function (result) {
+        if (result) {
+          // At this time, there exists only one conversation per Customer.
+          setConversationId(Number(result[0].id));
+          setData(result[0]["message_set"]);
+          setLoading(false);
+        }
       });
-      const json = await response.json();
-      // Here we get an array :
-      // console.log("json : ", json);
-      setData(json[0]["message_set"]);
-      console.log("data : ", data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Un problème est survenu durant la connexion distante.");
     }
   };
 
   useEffect(() => {
-    callAPI();
+    getConversation();
+    return () => {};
   }, []);
+
+  /* 
+    Send message through API. 
+    https://ventalis.herokuapp.com/api/messages/ 
+  */
+  const submit = () => {
+    messageInput.current.blur();
+    if (currentUser !== null) {
+      currentUser.apiSendMessage(conversationId, message, function (result) {
+        if (result) {
+          // populate useState vars;
+          setMessage("");
+          getConversation();
+        }
+      });
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text>Conversation Page !</Text>
-      {loading ? <Text>...loading...</Text> : <Text>LOADED !</Text>}
-      {loading ? null : (
-        <FlatList
-          data={data}
-          renderItem={({ item }) => (
-            <Text style={styles.message}>{item.content}</Text>
-          )}
-        ></FlatList>
-      )}
       <StatusBar style="auto" />
+      <KeyboardAvoidingView behavior="padding" style={styles.form}>
+        <Text>Conversation Page !</Text>
+        {loading ? <Text>...loading...</Text> : <Text>LOADED !</Text>}
+        {loading ? null : (
+          <FlatList
+            data={data}
+            renderItem={({ item }) => (
+              <Text style={styles.message}>{item.content}</Text>
+            )}
+          ></FlatList>
+        )}
+        <Text>Nouveau message</Text>
+        <TextInput
+          style={styles.input}
+          value={message}
+          onChangeText={(text) => setMessage(text)}
+          ref={messageInput}
+          placeholder="Votre message"
+          autoCapitalize="none"
+          autoCorrect={true}
+          // autoCorrect={false}
+          returnKeyType="send"
+          blurOnSubmit={true}
+        />
+        <View>
+          <Button
+            onPress={() => {
+              console.log("pressed");
+              submit();
+            }}
+            title="Envoyer"
+          ></Button>
+        </View>
+      </KeyboardAvoidingView>
     </View>
   );
 };
@@ -66,6 +108,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  form: {},
+  input: {
+    margin: 20,
+    // marginBottom: 0,
+    marginTop: 5,
+    height: 34,
+    paddingHorizontal: 10,
+    borderRadius: 4,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    fontSize: 16,
+    width: 200,
   },
   message: {},
 });

@@ -2,9 +2,8 @@
 
 import React, { useState, useContext, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { CurrentUserContext, User } from "../utils/user-class";
-import { API_URL, API_TOKEN_URL } from "../utils/constants";
 
 export default Detail = ({ route, navigation }) => {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
@@ -16,35 +15,22 @@ export default Detail = ({ route, navigation }) => {
     We need to fetch order # from https://ventalis.herokuapp.com/api/orders/#
     And display details.
   */
-  const getOrder = async () => {
-    if (currentUser !== null) {
-      try {
-        const url = API_URL + `whole_orders/${orderId}`;
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `token ${currentUser.token}`,
-          },
-        });
 
-        const json = await response.json();
-        console.log("json in getOrder : ", json);
-        // populate useState vars;
-        setOrder(json);
-        setLineItems(
-          json.lineitem_set.map((item) => (
-            <Text key={item.product}>
-              {item.product} Qté : {item.quantity} Prix {item.price}HT
-            </Text>
-          ))
-        );
-        /************/
-      } catch (error) {
-        console.log(error);
-        Alert.alert("Un problème est survenu durant la connexion distante.");
-      }
+  const getOrder = () => {
+    if (currentUser !== null) {
+      currentUser.apiGetOrderDetail(orderId, function (result) {
+        if (result) {
+          // populate useState vars;
+          setOrder(result);
+          setLineItems(
+            result.lineitem_set.map((item) => (
+              <Text key={item.product}>
+                {item.product} Qté : {item.quantity} Prix {item.price}HT
+              </Text>
+            ))
+          );
+        }
+      });
     }
   };
 

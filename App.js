@@ -9,7 +9,7 @@ import HomeScreen from "./components/home";
 import OrdersScreen from "./components/orders";
 import DetailScreen from "./components/order-details";
 import ConversationScreen from "./components/conversation";
-import { User, CurrentUserContext } from "./utils/user-class";
+import { CurrentUserContext } from "./utils/user-class";
 
 const Stack = createNativeStackNavigator();
 

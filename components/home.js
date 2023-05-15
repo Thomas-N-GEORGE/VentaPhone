@@ -6,22 +6,9 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import { CurrentUserContext } from "../utils/user-class";
 
 export default Home = ({ navigation }) => {
-  /* 
-    We need to fetch user # details
-    from https://ventalis.herokuapp.com/api/users/#
-    and also user's employee first name.
-    BUT not sure where to pass them...
-    And display details.
-  */
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
 
   console.log("user in HOME PAGE : ", currentUser);
-
-  const fakeUser = {
-    first_name: "Thomas",
-    last_name: "George",
-    employeeFirstName: "Julie",
-  };
 
   return (
     <View style={styles.container}>

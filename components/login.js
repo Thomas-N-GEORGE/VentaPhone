@@ -15,16 +15,11 @@ import {
 import { CurrentUserContext, User } from "../utils/user-class";
 
 export default Login = ({ navigation }) => {
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const emailInput = useRef(null);
   const [email, setEmail] = useState("");
   const passwordInput = useRef(null);
   const [password, setPassword] = useState("");
-  // const [user, setUser] = useState(new User());
-  const {
-    currentUser,
-    setCurrentUser
-  } = useContext(CurrentUserContext);
-
 
   const submit = () => {
     emailInput.current.blur();
@@ -43,13 +38,13 @@ export default Login = ({ navigation }) => {
         console.log("result from Login : ", result);
         console.log("and user from Login : ", user);
         setCurrentUser(user);
-        // Route to home !
       } else {
         console.log("result from Login : ", result);
         console.log("and user from Login : ", user);
         setCurrentUser(null);
       }
-      navigation.navigate('Home');
+      // Route to home.
+      navigation.navigate("Home");
     });
   };
 
@@ -134,85 +129,3 @@ const styles = StyleSheet.create({
     // justifyContent: "space-between",
   },
 });
-
-// Module displaying login page
-
-// import { StatusBar } from 'expo-status-bar';
-// import React, { useState, useRef } from "react";
-// import {
-//   Alert,
-//   Image,
-//   Text,
-//   StatusBar,
-//   TextInput,
-//   Button,
-//   View,
-//   StyleSheet,
-//   ScrollView,
-//   KeyboardAvoidingView,
-// } from "react-native";
-// import login from "./module-api";
-
-// // const LoginVentaphone = ({ navigation }) => {
-// const LoginVentaphone = () => {
-//   const emailInput = useRef(null);
-//   const [email, setEmail] = useState("");
-//   const passwordInput = useRef(null);
-//   const [password, setPassword] = useState("");
-
-/*********************************/
-//   const submit = () => {
-//     emailInput.current.blur();
-
-//     // Call API to get token...
-//     login(email, password);
-//   };
-
-//   return (
-//     <ScrollView>
-//       <View style={styles.container}>
-//         <Image
-//           source={require("./img/logo/logo_black_small.png")}
-//           style={{ resizeMode: "contain", width: 200, height: 100 }}
-//         />
-//       </View>
-//       <View style={styles.container}>
-//         <StatusBar barStyle="light-content" />
-//         <KeyboardAvoidingView behavior="padding" style={styles.form}>
-//           <Text>Email</Text>
-//           <TextInput
-//             style={styles.input}
-//             value={email}
-//             onChangeText={(text) => setEmail(text)}
-//             ref={emailInput}
-//             placeholder="email@example.com"
-//             autoCapitalize="none"
-//             autoCorrect={false}
-//             keyboardType="email-address"
-//             returnKeyType="next"
-//             onSubmitEditing={() => passwordInput.current.focus()}
-//             blurOnSubmit={false}
-//           />
-//           <Text>Mot de passe</Text>
-//           <TextInput
-//             style={[styles.input, styles.passwordInput]}
-//             value={password}
-//             onChangeText={(text) => setPassword(text)}
-//             ref={passwordInput}
-//             secureTextEntry={true}
-//             onSubmitEditing={submit}
-//           />
-//           <View>
-//             <Button
-//               onPress={() => {
-//                 console.log("pressed");
-//                 submit();
-//               }}
-//               title="Se connecter"
-//             ></Button>
-//           </View>
-//         </KeyboardAvoidingView>
-//       </View>
-//     </ScrollView>
-//   );
-// };

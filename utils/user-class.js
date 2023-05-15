@@ -7,6 +7,8 @@ import { API_URL, API_TOKEN_URL } from "./constants";
 // Context for whole app.
 export const CurrentUserContext = React.createContext(null);
 
+// User class for whole app.
+// Contains all the API calls.
 export class User {
   constructor(
     user_id = null,
@@ -193,31 +195,31 @@ export class User {
   };
 
   // "orederId is not a function..." Not solved yet.
-  // apiGetOrderDetail = async (orderId, callback) => {
-  //   /* Fetch specific order from API. */
-  //   /* https://ventalis.herokuapp.com/api/whole_orders/# */
-  //   console.log("IN GetOrderDetail, orderId = ", orderId);
-  //   try {
-  //     const url = API_URL + `whole_orders/${orderId}`;
-  //     const response = await fetch(url, {
-  //       method: "GET",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //         Authorization: `token ${this.token}`,
-  //       },
-  //     });
+  async apiGetOrderDetail(orderId, callback) {
+    /* Fetch specific order from API. */
+    /* https://ventalis.herokuapp.com/api/whole_orders/# */
+    console.log("IN GetOrderDetail, orderId = ", orderId);
+    try {
+      const url = API_URL + `whole_orders/${orderId}`;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `token ${this.token}`,
+        },
+      });
 
-  //     const json = await response.json();
-  //     console.log("json in apiGetOrderDetail : ", json);
-  //     return callback(json);
-  //     /************/
-  //   } catch (error) {
-  //     console.log(error);
-  //     Alert.alert("Un problème est survenu durant la connexion distante.");
-  //     return callback(false);
-  //   }
-  // };
+      const json = await response.json();
+      console.log("json in apiGetOrderDetail : ", json);
+      return callback(json);
+      /************/
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Un problème est survenu durant la connexion distante.");
+      return callback(false);
+    }
+  }
 
   apiGetConversation = async (callback) => {
     /* Fetch related user conversation from API. */
@@ -245,7 +247,7 @@ export class User {
     }
   };
 
-  apiSendMessage = async (message, callback) => {
+  async apiSendMessage(conversationId, message, callback) {
     /* Send message through API. */
     /* https://ventalis.herokuapp.com/api/messages/ */
     try {
@@ -258,21 +260,18 @@ export class User {
           Authorization: `token ${this.token}`,
         },
         body: JSON.stringify({
+          conversation_id: conversationId,
           content: message,
         }),
       });
 
-      const json = await response.json();
-      console.log("json in apiSend Message : ", json);
-      // if (response.statusText !== "OK") {
-      // throw new Error('Un problème est survenu durant la connexion distante.');
-      // }
-      return callback(json);
+      return callback(response.ok);
       /************/
     } catch (error) {
       console.log(error);
       Alert.alert("Un problème est survenu durant la connexion distante.");
+      Alert.alert("Le message n'a pas été envoyé.");
       return callback(false);
     }
-  };
+  }
 }

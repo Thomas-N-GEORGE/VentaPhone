@@ -1,4 +1,4 @@
-// Utility module for settings.
+// Utility module with settings.
 
 // PROD
 export const API_URL = "https://ventalis.herokuapp.com/api/";
