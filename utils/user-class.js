@@ -165,4 +165,112 @@ export class User {
       return callback(false);
     }
   };
+
+  apiGetOrders = async (callback) => {
+    /* Fetch user related orders from API. */
+    /* https://ventalis.herokuapp.com/api/user_orders/ */
+    try {
+      console.log("IN apiGetOrders.");
+      const url = API_URL + "user_orders/";
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `token ${this.token}`,
+        },
+      });
+
+      const json = await response.json();
+      console.log("json in apiGetOrders : ", json);
+      return callback(json);
+      /************/
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Un problème est survenu durant la connexion distante.");
+      return callback(false);
+    }
+  };
+
+  apiGetOrderDetail = async (orderId, callback) => {
+    /* Fetch specific order from API. */
+    /* https://ventalis.herokuapp.com/api/orders/# */
+    try {
+      const url = API_URL + `orders/${orderId}`;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `token ${this.token}`,
+        },
+      });
+
+      const json = await response.json();
+      console.log("json in apiGetOrderDetail : ", json);
+      return callback(json);
+      /************/
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Un problème est survenu durant la connexion distante.");
+      return callback(false);
+    }
+  };
+
+  apiGetConversation = async (callback) => {
+    /* Fetch related user conversation from API. */
+    /* https://ventalis.herokuapp.com/api/user_conversations/ */
+    try {
+      const url = API_URL + "user_conversations/";
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `token ${this.token}`,
+        },
+      });
+
+      const json = await response.json();
+      console.log("json in apiGetConversation : ", json);
+      // At this time, there exists only one conversation per Customer.
+      return callback(json);
+      /************/
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Un problème est survenu durant la connexion distante.");
+      return callback(false);
+    }
+  };
+
+  apiSendMessage = async (message, callback) => {
+    /* Send message through API. */
+    /* https://ventalis.herokuapp.com/api/messages/ */
+    try {
+      const url = API_URL + "messages/";
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `token ${this.token}`,
+        },
+        body: JSON.stringify({
+          content: message,
+        }),
+      });
+
+      const json = await response.json();
+      console.log("json in apiSend Message : ", json);
+      // if (response.statusText !== "OK") {
+      // throw new Error('Un problème est survenu durant la connexion distante.');
+      // }
+      return callback(json);
+      /************/
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Un problème est survenu durant la connexion distante.");
+      return callback(false);
+    }
+  };
 }
