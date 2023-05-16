@@ -53,8 +53,6 @@ export class User {
      * to fetch all the necessary user info for the app.
      * */
     try {
-      console.log("at top of apiLoginUser : ", this.email, this.password);
-
       /*******************/
       /* 1. Fetch token. */
       /*******************/
@@ -75,7 +73,7 @@ export class User {
       this.password = null;
 
       const json1 = await response1.json();
-      console.log("json1 in login : ", json1);
+      // console.log("json1 in login : ", json1);
 
       // Abort if username / password no good.
       if ("non_field_errors" in json1) {
@@ -104,7 +102,7 @@ export class User {
       });
 
       const json2 = await response2.json();
-      console.log("json2 in login : ", json2);
+      // console.log("json2 in login : ", json2);
 
       // Abort if we have wrong user role.
       if (json2.role !== "CUSTOMER") {
@@ -132,7 +130,7 @@ export class User {
         },
       });
       const json3 = await response3.json();
-      console.log("json3 in login : ", json3);
+      // console.log("json3 in login : ", json3);
 
       // Here we get an array :
       const employeeReg = json3[0]["employee_reg"];
@@ -150,18 +148,18 @@ export class User {
         },
       });
       const json4 = await response4.json();
-      console.log("json4 in login : ", json4);
+      // console.log("json4 in login : ", json4);
 
       // Here we get an array :
       this.employeeFirstName = json4[0]["first_name"];
 
-      console.log("this from apiCompleteUser : ", this);
+      // console.log("this from apiCompleteUser : ", this);
       // And finally return "complete" user.
       return callback(this);
 
       /************/
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       this.resetAllUserFields();
       Alert.alert("Un problème est survenu durant la connexion distante.");
       return callback(false);
@@ -172,7 +170,6 @@ export class User {
     /* Fetch user related orders from API. */
     /* https://ventalis.herokuapp.com/api/user_orders/ */
     try {
-      console.log("IN apiGetOrders.");
       const url = API_URL + "user_orders/";
       const response = await fetch(url, {
         method: "GET",
@@ -184,11 +181,11 @@ export class User {
       });
 
       const json = await response.json();
-      console.log("json in apiGetOrders : ", json);
+      // console.log("json in apiGetOrders : ", json);
       return callback(json);
       /************/
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       Alert.alert("Un problème est survenu durant la connexion distante.");
       return callback(false);
     }
@@ -198,7 +195,6 @@ export class User {
   async apiGetOrderDetail(orderId, callback) {
     /* Fetch specific order from API. */
     /* https://ventalis.herokuapp.com/api/whole_orders/# */
-    console.log("IN GetOrderDetail, orderId = ", orderId);
     try {
       const url = API_URL + `whole_orders/${orderId}`;
       const response = await fetch(url, {
@@ -211,11 +207,11 @@ export class User {
       });
 
       const json = await response.json();
-      console.log("json in apiGetOrderDetail : ", json);
+      // console.log("json in apiGetOrderDetail : ", json);
       return callback(json);
       /************/
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       Alert.alert("Un problème est survenu durant la connexion distante.");
       return callback(false);
     }
@@ -236,12 +232,12 @@ export class User {
       });
 
       const json = await response.json();
-      console.log("json in apiGetConversation : ", json);
+      // console.log("json in apiGetConversation : ", json);
       // At this time, there exists only one conversation per Customer.
       return callback(json);
       /************/
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       Alert.alert("Un problème est survenu durant la connexion distante.");
       return callback(false);
     }
@@ -268,7 +264,7 @@ export class User {
       return callback(response.ok);
       /************/
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       Alert.alert("Un problème est survenu durant la connexion distante.");
       Alert.alert("Le message n'a pas été envoyé.");
       return callback(false);

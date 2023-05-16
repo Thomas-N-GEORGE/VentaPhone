@@ -7,12 +7,14 @@ import {
   Button,
   FlatList,
   KeyboardAvoidingView,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
 import { CurrentUserContext } from "../utils/user-class";
+import { jsonDateToFrenchString } from "../utils/utils";
 
 export default Conversation = ({ navigation }) => {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
@@ -21,6 +23,7 @@ export default Conversation = ({ navigation }) => {
   const [data, setData] = useState(false);
   const messageInput = useRef(null);
   const [message, setMessage] = useState("");
+  const messageList = useRef(null);
 
   /* 
     We need to fetch user conversation
@@ -34,6 +37,7 @@ export default Conversation = ({ navigation }) => {
           setConversationId(Number(result[0].id));
           setData(result[0]["message_set"]);
           setLoading(false);
+          // messageList.current.scrollToEnd(); // ??
         }
       });
     }
@@ -64,38 +68,55 @@ export default Conversation = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <KeyboardAvoidingView behavior="padding" style={styles.form}>
-        <Text>Conversation Page !</Text>
-        {loading ? <Text>...loading...</Text> : <Text>LOADED !</Text>}
+      <KeyboardAvoidingView behavior="height" style={styles.form}>
         {loading ? null : (
           <FlatList
+            ref={messageList}
             data={data}
             renderItem={({ item }) => (
-              <Text style={styles.message}>{item.content}</Text>
+              <View key={item.id}>
+                <Text
+                  style={[
+                    styles.message,
+                    item.author === currentUser.email
+                      ? { textAlign: "right", marginLeft: 50 }
+                      : { textAlign: "left", marginRight: 50 },
+                  ]}
+                >
+                  {item.content}
+                </Text>
+                <Text
+                  style={[
+                    styles.messageDate,
+                    item.author === currentUser.email
+                      ? { textAlign: "right", marginLeft: 50 }
+                      : { textAlign: "left", marginRight: 50 },
+                  ]}
+                >
+                  {jsonDateToFrenchString(item.date_created)}
+                </Text>
+              </View>
             )}
           ></FlatList>
         )}
-        <Text>Nouveau message</Text>
-        <TextInput
-          style={styles.input}
-          value={message}
-          onChangeText={(text) => setMessage(text)}
-          ref={messageInput}
-          placeholder="Votre message"
-          autoCapitalize="none"
-          autoCorrect={true}
-          // autoCorrect={false}
-          returnKeyType="send"
-          blurOnSubmit={true}
-        />
-        <View>
-          <Button
-            onPress={() => {
-              console.log("pressed");
-              submit();
-            }}
-            title="Envoyer"
-          ></Button>
+        <View style={{ alignSelf: "center", marginTop: 20 }}>
+          <TextInput
+            style={styles.input}
+            value={message}
+            onChangeText={(text) => setMessage(text)}
+            ref={messageInput}
+            placeholder="Nouveau message"
+            autoCapitalize="none"
+            autoCorrect={true}
+            // autoCorrect={false}
+            returnKeyType="send"
+            blurOnSubmit={true}
+          />
+        </View>
+        <View style={{ paddingBottom: 15 }}>
+          <Pressable onPress={() => submit()} style={{ alignSelf: "center" }}>
+            <Text style={[styles.button]}>Envoyer</Text>
+          </Pressable>
         </View>
       </KeyboardAvoidingView>
     </View>
@@ -114,13 +135,33 @@ const styles = StyleSheet.create({
     margin: 20,
     // marginBottom: 0,
     marginTop: 5,
-    height: 34,
+    height: 50,
     paddingHorizontal: 10,
-    borderRadius: 4,
+    borderRadius: 8,
     borderColor: "#ccc",
     borderWidth: 1,
     fontSize: 16,
-    width: 200,
+    width: 260,
   },
-  message: {},
+  message: {
+    margin: 3,
+    padding: 5,
+    backgroundColor: "#f5f5f5",
+    borderRadius: 10,
+  },
+  messageDate: {
+    marginBottom: 10,
+    paddingHorizontal: 5,
+    fontSize: 11,
+  },
+  button: {
+    width: 200,
+    padding: 10,
+    backgroundColor: "#3a5fa4",
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
+    textAlignVertical: "center",
+    borderRadius: 20,
+  },
 });

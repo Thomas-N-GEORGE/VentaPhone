@@ -8,6 +8,7 @@ import {
   TextInput,
   Button,
   View,
+  Pressable,
   StyleSheet,
   ScrollView,
   KeyboardAvoidingView,
@@ -28,33 +29,30 @@ export default Login = ({ navigation }) => {
     const user = new User();
     user.email = email;
     user.password = password;
-    console.log("user.email : ", email);
-    console.log("user.password : ", password);
+
 
     // Make API calls to populate user fields.
     user.apiLoginUser(function (result) {
       // The result of connection guides our next step :
       if (result) {
-        console.log("result from Login : ", result);
-        console.log("and user from Login : ", user);
+        // console.log("result from Login : ", result);
+        // console.log("and user from Login : ", user);
         setCurrentUser(user);
+        // Route to home.
+        navigation.navigate("Home");
       } else {
-        console.log("result from Login : ", result);
-        console.log("and user from Login : ", user);
         setCurrentUser(null);
       }
-      // Route to home.
-      navigation.navigate("Home");
     });
   };
 
   return (
     <ScrollView>
-      <View style={styles.container}>
-        <Text>This is our LOGIN page</Text>
-        <StatusBar style="auto" />
+      <StatusBar style="auto" />
+      <View style={[styles.container, {paddingVertical: 25}]}>
+        <Text style={styles.title}>Se connecter</Text>
       </View>
-      <View style={styles.container}>
+      <View style={[styles.container, {flex: 2,}]}>
         <StatusBar barStyle="light-content" />
         <KeyboardAvoidingView behavior="padding" style={styles.form}>
           <Text>Email</Text>
@@ -80,14 +78,10 @@ export default Login = ({ navigation }) => {
             secureTextEntry={true}
             onSubmitEditing={submit}
           />
-          <View>
-            <Button
-              onPress={() => {
-                console.log("pressed");
-                submit();
-              }}
-              title="Se connecter"
-            ></Button>
+          <View >
+            <Pressable onPress={submit}>
+              <Text style={[styles.button, {marginTop: 20, marginBottom: 50}]}>SE CONNECTER</Text>
+            </Pressable>
           </View>
         </KeyboardAvoidingView>
       </View>
@@ -102,11 +96,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  header: {
-    // paddingTop: 64,
-    // padding: 20,
-    // backgroundColor: "#282c34",
+  title: {
+    fontWeight: "bold",
+    fontSize: 25,
   },
+
   description: {
     // fontSize: 14,
     // color: "white",
@@ -127,5 +121,14 @@ const styles = StyleSheet.create({
   form: {
     // flex: 1,
     // justifyContent: "space-between",
+  },
+  button: {
+    height: 40,
+    backgroundColor: "#3a5fa4",
+    color: "white",
+    fontSize: 17,
+    textAlign: "center",
+    textAlignVertical : "center",
+    borderRadius: 20,
   },
 });

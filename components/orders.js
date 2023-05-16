@@ -2,9 +2,16 @@
 
 import React, { useState, useContext, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View, YellowBox } from "react-native";
-import { ordersData } from "../fake-data/user-orders";
-import { CurrentUserContext, User } from "../utils/user-class";
+import {
+  Button,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+} from "react-native";
+import { CurrentUserContext } from "../utils/user-class";
+import { jsonDateToFrenchString, statusToString } from "../utils/utils";
 
 // Context for buttons in view.
 export const OrderIdContext = React.createContext();
@@ -20,23 +27,28 @@ export default Order = ({ navigation }) => {
   const getOrders = () => {
     if (currentUser !== null) {
       currentUser.apiGetOrders(function (result) {
-        console.log("get orders Called.");
         if (result) {
-          console.log("result in getOrders, from order page :", result);
+          // console.log("result in getOrders, from order page :", result);
           // button list display
           setOrderDetailBtnList(
             result.map((item) => (
-              <Button
-                title={item.ref_number}
-                key={item.id}
-                onPress={() =>
-                  /* Navigate to the Details route with params */
-                  navigation.navigate("Details", {
-                    orderId: item.id,
-                    orderRef: item.ref_number,
-                  })
-                }
-              />
+              <View key={item.id} style={styles.test}>
+                <Pressable
+                  // key={item.id}
+                  onPress={() =>
+                    navigation.navigate("Details", {
+                      orderId: item.id,
+                      orderRef: item.ref_number,
+                    })
+                  }
+                >
+                <View style={[styles.button]} >
+                  <Text style={[styles.btnText, {fontWeight: "bold"}]}>Réf. {item.ref_number}</Text>
+                  <Text style={styles.btnText}>créée le {jsonDateToFrenchString(item.date_created)}</Text>
+                  <Text style={styles.btnText}>{item.incl_vat_price}€ TTC,  statut : {statusToString(item.status)}</Text>
+                  </View>
+                </Pressable>
+              </View>
             ))
           );
         } else {
@@ -50,15 +62,16 @@ export default Order = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text>This is our ALL ORDERS PAGE</Text>
-      {currentUser !== null ? (
-        orderDetailBtnList
-      ) : (
-        <Text>Vous n'êtes pas connecté(e)</Text>
-      )}
+    <ScrollView>
       <StatusBar style="auto" />
-    </View>
+      <View style={styles.container}>
+        {currentUser !== null ? (
+          orderDetailBtnList
+        ) : (
+          <Text>Vous n'êtes pas connecté(e)</Text>
+        )}
+      </View>
+    </ScrollView>
   );
 };
 
@@ -68,5 +81,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  button: {
+    width: 300,
+    padding: 20,
+    backgroundColor: "white",
+    color: "#3a5fa4",
+    fontSize: 17,
+    textAlign: "center",
+    textAlignVertical: "center",
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: "#3a5fa4",
+  },
+  btnText: {
+    color: "#3a5fa4",
+    fontSize: 17,
+    textAlign: "center",
+    textAlignVertical: "center",
+  },
+  spacer: {
+    height: 20,
+  },
+  test: {
+    padding: 5,
   },
 });
