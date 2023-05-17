@@ -22,22 +22,22 @@ Documentation dans le dossier `documentation/`
  - Dans un terminal, se placer à l'emplacement local où l'on veut que le dossier source soit cloné.
  - Exécuter la commande git clone : 
 ````
-$ git clone https://github.com/Thomas-N-GEORGE/Ventaphone.git
+ git clone https://github.com/Thomas-N-GEORGE/Ventaphone.git
 ````
 
  - En principe un dossier nommé Ventaphone s'est crée. S'y déplacer : 
 ````
-$ cd Ventaphone
+ cd Ventaphone
 ````
 2. Installer les dépendances du projet : 
 ````
-$ npm install
+ npm install
 ````
 3. Installer l'appli Expo Go sur son smartphone : https://docs.expo.dev/get-started/expo-go/
 
 4. Lancer l'application dans le terminal : 
 ````
-$ npx expo start
+ npx expo start
 ````
  - Connecter le smartphone au réseau local via le wifi.
  - Lancer Expo Go et scanner le QR code (dans le terminal).
