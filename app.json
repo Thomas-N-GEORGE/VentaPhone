@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "Ventaphone",
+    "slug": "Ventaphone",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    // "icon": "./assets/icon.png",
+    "icon": "./assets/logo_v_black_adaptive_icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      // "image": "./assets/splash.png",
+      "image": "./assets/logo_V_black_splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        // "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logo_v_black_adaptive_icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
