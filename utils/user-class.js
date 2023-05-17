@@ -195,6 +195,10 @@ export class User {
   async apiGetOrderDetail(orderId, callback) {
     /* Fetch specific order from API. */
     /* https://ventalis.herokuapp.com/api/whole_orders/# */
+    // console.log("in apiGetOrderDetail");
+    orderId = orderId.toString();
+    // console.log("orderId in apiGetOrderDetail", orderId);
+    // console.log("token in apiGetOrderDetail : ", this.token);
     try {
       const url = API_URL + `whole_orders/${orderId}`;
       const response = await fetch(url, {

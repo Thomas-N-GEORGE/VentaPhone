@@ -10,6 +10,7 @@ export default Detail = ({ route, navigation }) => {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const { orderId, orderRef } = route.params;
   const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [lineItems, setLineItems] = useState(null);
 
   /* 
@@ -29,19 +30,21 @@ export default Detail = ({ route, navigation }) => {
               </Text>
             ))
           );
+          setLoading(false);
         }
       });
     }
   };
 
   useEffect(() => {
+    setLoading(true);
     getOrder();
   }, []);
 
   return (
     <ScrollView>
       <View style={styles.container}>
-        {order !== null ? (
+        {(order !== null && loading === false ) ? (
           <View>
             <Text
               style={{
@@ -63,7 +66,7 @@ export default Detail = ({ route, navigation }) => {
               Commentaire de votre conseiller {currentUser.employeeFirstName} :
             </Text>
             <Text style={[styles.text, { textAlign: "left" }]}>
-              {order.comment_set[0].content}
+              {order.comment_set.length > 0 ? order.comment_set[0].content : null }
             </Text>
             <View style={styles.spacer}></View>
             <Text style={{ fontWeight: "bold" }}>PRODUITS : </Text>
