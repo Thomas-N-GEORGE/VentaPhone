@@ -3,8 +3,6 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
-  Alert,
-  Button,
   FlatList,
   KeyboardAvoidingView,
   Pressable,
