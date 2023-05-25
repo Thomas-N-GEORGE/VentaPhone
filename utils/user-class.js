@@ -200,7 +200,7 @@ export class User {
     // console.log("orderId in apiGetOrderDetail", orderId);
     // console.log("token in apiGetOrderDetail : ", this.token);
     try {
-      const url = API_URL + `whole_orders/${orderId}`;
+      const url = API_URL + `whole_orders/${orderId}/`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
